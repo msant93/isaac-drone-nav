@@ -1,0 +1,62 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dronenav"
+version = "0.1.0"
+description = "Autonomous quadrotor navigation (planning, avoidance, control) in NVIDIA Isaac Sim + Pegasus Simulator."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+authors = [{ name = "Michele Santoru" }]
+# Runtime deps are kept minimal and unpinned-upper so that the package can be
+# installed into Isaac Sim's bundled Python without upgrading its numpy/scipy.
+dependencies = [
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "pyyaml>=6.0",
+    "pydantic>=2.5",
+]
+
+[project.optional-dependencies]
+analysis = ["matplotlib>=3.7", "pandas>=2.0", "imageio>=2.31"]
+dev = ["pytest>=8.0", "pytest-cov>=4.1", "ruff>=0.6", "mypy>=1.10", "types-PyYAML", "pre-commit>=3.5"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+dronenav = ["py.typed"]
+
+# --------------------------------------------------------------------------- #
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+src = ["src", "tests", "scripts"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "D", "SIM", "RUF"]
+ignore = ["D105", "D107"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["D"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+files = ["src/dronenav"]
+# Isaac Sim / Pegasus are only available inside Isaac's Python interpreter.
+exclude = ["src/dronenav/sim/isaac_pegasus/"]
+
+[[tool.mypy.overrides]]
+module = ["isaacsim.*", "omni.*", "carb.*", "pegasus.*", "pxr.*", "scipy.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+markers = ["isaac: requires Isaac Sim (skipped automatically outside Isaac's Python)"]

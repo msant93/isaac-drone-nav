@@ -1,0 +1,12 @@
+# Host-side conda environment (tests, planning/control development, analysis).
+# Python 3.11 matches the interpreter bundled with Isaac Sim 5.x.
+#   conda env create -f environment.yml && conda activate dronenav
+name: dronenav
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - pip:
+      - -r requirements.txt
+      - -e .

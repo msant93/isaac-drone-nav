@@ -1,0 +1,16 @@
+# Host-side (non-Isaac) dependencies. Install with:
+#   pip install -r requirements.txt && pip install -e .
+numpy>=1.24
+scipy>=1.10
+pyyaml>=6.0
+pydantic>=2.5
+matplotlib>=3.7
+pandas>=2.0
+imageio>=2.31
+# Development tools
+pytest>=8.0
+pytest-cov>=4.1
+ruff>=0.6
+mypy>=1.10
+types-PyYAML
+pre-commit>=3.5

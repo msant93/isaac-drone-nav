@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE / OS
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+
+# Isaac Sim / Omniverse caches and logs
+docker/cache/
+*.log
+_isaac_sim
+kit/
+
+# Results: keep curated summaries, ignore raw per-run outputs
+results/**/trajectory.csv
+results/**/*.npz
+results/**/*.mp4
+results/**/raw/
+!results/README.md
+
+# Report build artefacts
+docs/report/*.aux
+docs/report/*.bbl
+docs/report/*.blg
+docs/report/*.out
+docs/report/*.toc
+docs/report/*.synctex.gz
+docs/report/*.fdb_latexmk
+docs/report/*.fls
+
+# Local environment files
+.env

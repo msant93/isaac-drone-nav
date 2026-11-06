@@ -1,0 +1,38 @@
+# Usage (from the repository root):
+#   docker compose -f docker/docker-compose.yml build
+#   docker compose -f docker/docker-compose.yml run --rm sim            # shell
+#   ./docker/run_headless.sh scripts/smoke_test_hover.py                # headless run
+#   ./docker/run_livestream.sh scripts/smoke_test_hover.py              # WebRTC stream
+#   ./docker/run_gui.sh scripts/smoke_test_hover.py                     # local X11 GUI
+services:
+  sim:
+    image: isaac-drone-nav:isaacsim-5.1.0
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    user: "1234:1234"
+    network_mode: host          # required by the WebRTC livestream
+    ipc: host
+    environment:
+      ACCEPT_EULA: "Y"
+      PRIVACY_CONSENT: "Y"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    volumes:
+      - ..:/workspace/isaac-drone-nav:rw
+      # Persistent Isaac Sim caches: the first start compiles shaders (slow),
+      # later starts reuse them. Paths follow NVIDIA's container guide.
+      - ./cache/main:/isaac-sim/.cache:rw
+      - ./cache/computecache:/isaac-sim/.nv/ComputeCache:rw
+      - ./cache/logs:/isaac-sim/.nvidia-omniverse/logs:rw
+      - ./cache/config:/isaac-sim/.nvidia-omniverse/config:rw
+      - ./cache/data:/isaac-sim/.local/share/ov/data:rw
+      - ./cache/pkg:/isaac-sim/.local/share/ov/pkg:rw
+    working_dir: /workspace/isaac-drone-nav
+    stdin_open: true
+    tty: true

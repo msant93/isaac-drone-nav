@@ -1,0 +1,41 @@
+# Phase 1 smoke test: spawn the Pegasus Iris in an empty world, take off,
+# hover, land. Units: SI (m, s, kg, rad). World frame: ENU.
+#
+# NOTE: the controller used by the smoke test is a deliberately minimal,
+# temporary geometric hover controller. It is replaced by the project's
+# cascaded controller in Phase 3.
+
+simulation:
+  headless: true          # overridden by --gui / --livestream on the CLI
+  physics_dt: 0.004       # 250 Hz, Pegasus default for the PX4/Python backends
+  rendering_dt: 0.0166667 # ~60 Hz
+  max_sim_time: 30.0      # hard stop [s]
+
+vehicle:
+  prim_path: /World/quadrotor
+  spawn_position: [0.0, 0.0, 0.07]  # Pegasus examples spawn slightly above ground
+  spawn_yaw_deg: 0.0
+  mass: 1.50                        # [kg], value used by Pegasus' example controller
+
+mission:
+  takeoff_altitude: 1.5   # [m]
+  climb_rate: 0.5         # [m/s] setpoint ramp during takeoff
+  hover_duration: 10.0    # [s]
+  descent_rate: 0.4       # [m/s] setpoint ramp during landing
+
+controller:
+  kp: [4.0, 4.0, 6.0]     # position gains
+  kd: [3.0, 3.0, 4.0]     # velocity gains
+  ki: [0.3, 0.3, 0.6]     # integral gains
+  kr: [3.5, 3.5, 3.5]     # attitude gains
+  kw: [0.5, 0.5, 0.5]     # angular-rate gains
+  integral_limit: 2.0     # anti-windup clamp on the integral term [m*s]
+
+acceptance:
+  hover_settle_time: 3.0       # ignore the first seconds of hover
+  max_hover_alt_error: 0.15    # [m]
+  max_hover_xy_drift: 0.20     # [m]
+  max_landing_alt: 0.25        # [m], vehicle must end below this
+
+output:
+  results_dir: results/smoke_test

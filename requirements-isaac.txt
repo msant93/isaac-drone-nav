@@ -1,0 +1,7 @@
+# Extra packages installed into Isaac Sim's bundled Python (python.sh).
+# numpy / scipy / pyyaml are already provided by Isaac Sim and MUST NOT be
+# upgraded: the Docker build pins them with a constraints file generated from
+# Isaac's own environment.
+pydantic>=2.5
+matplotlib>=3.7
+pandas>=2.0
