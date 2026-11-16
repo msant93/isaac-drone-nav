@@ -70,3 +70,13 @@ appended as the project evolves.
   same voxel map. A ground-truth perception mode exists for debugging only.
 - **To verify in Phase 7:** the exact Isaac Sim 5.1 LiDAR API, and whether Pegasus
   5.1 exposes LiDAR as a graphical sensor or we attach it ourselves.
+
+## ADR-009: NumPy simulator design (Phase 2)
+- **Decision:**
+  - Newton-Euler rigid-body model, integrated with RK4 at 250 Hz (semi-implicit Euler available for comparison).
+  - The rotor wrench is held constant during a step.
+  - The actuation model (`dronenav.model.quadrotor`) is a line-by-line match of Pegasus v5.1.0: quadratic thrust curve, `rot_dir` reaction torque, pseudo-inverse mixer with uniform saturation scaling, and linear body drag.
+  - Iris inertial parameters come from the PX4 Gazebo Iris model.
+- **Validation:** 76 unit tests, including closed-form comparisons (free fall, drag decay, yaw spin-up, torque-free energy and momentum conservation) and a cross-check of the mixer against a transcription of the Pegasus code. Errors are at the 1e-12 level.
+- **Performance:** the derivative uses scalar arithmetic instead of NumPy calls on 3-vectors, which brought the simulator from about 16x to about 55x real time on one CPU core.
+- **Open point:** the mass, inertia and rotor positions must be confirmed against the Pegasus Iris USD in Phase 3. The adapter will log the rigid-body properties.

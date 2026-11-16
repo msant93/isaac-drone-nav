@@ -1,0 +1,29 @@
+# 3DR Iris quadrotor, matching the Pegasus Simulator v5.1.0 "Iris" model.
+# Units: SI. Body frame: FLU (x forward, y left, z up), origin at the CoM.
+#
+# Sources:
+#  - rotor_constant, moment_constant, rotor directions, rotor speed limits:
+#    Pegasus QuadraticThrustCurve defaults (logic/thrusters/quadratic_thrust_curve.py, v5.1.0).
+#  - drag_coefficients: Pegasus MultirotorConfig default LinearDrag([0.50, 0.30, 0.0]).
+#  - mass, inertia, rotor positions: PX4 Gazebo "iris" model, from which the
+#    Pegasus Iris USD is derived. TO BE VERIFIED against the USD in Phase 3
+#    (the Isaac backend will print the rigid-body masses and rotor poses).
+#
+# Rotor order = Pegasus /rotor0../rotor3:
+#   0: front-right, 1: rear-left, 2: front-left, 3: rear-right
+
+vehicle:
+  name: iris
+  mass: 1.52                     # [kg] body 1.5 + 4 rotors x 0.005
+  inertia: [0.029125, 0.029125, 0.055225]   # [kg m^2] diagonal, about the CoM
+  rotors:
+    - {position: [ 0.13, -0.22, 0.023], direction: -1}
+    - {position: [-0.13,  0.20, 0.023], direction: -1}
+    - {position: [ 0.13,  0.22, 0.023], direction:  1}
+    - {position: [-0.13, -0.20, 0.023], direction:  1}
+  rotor_constant: 8.54858e-6     # [N s^2/rad^2]  thrust = k_f * w^2
+  moment_constant: 1.0e-6        # [N m s^2/rad^2] yaw torque = k_m * w^2 * dir
+  min_rotor_velocity: 0.0        # [rad/s]
+  max_rotor_velocity: 1100.0     # [rad/s]
+  motor_time_constant: 0.0       # [s] Pegasus applies rotor speeds instantly
+  drag_coefficients: [0.50, 0.30, 0.0]   # [N s/m] F_body = -diag(d) v_body

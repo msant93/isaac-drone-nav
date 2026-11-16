@@ -16,6 +16,7 @@ __version__ = "0.1.0"
 SUBPACKAGES: tuple[str, ...] = (
     "core",
     "config",
+    "model",
     "sim",
     "sim.python_sim",
     "scene",

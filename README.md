@@ -20,8 +20,8 @@ lands.
 | Phase | Content | Status |
 |---|---|---|
 | 0 | Environment, architecture, plan | ✅ |
-| 1 | Repository skeleton, Docker image, CI, Isaac Sim + Pegasus smoke test | 🚧 |
-| 2 | Core math, configs, NumPy quadrotor simulator | ⏳ |
+| 1 | Repository skeleton, Docker image, CI, Isaac Sim + Pegasus smoke test | ✅ (GPU smoke test pending) |
+| 2 | Core math, configs, NumPy quadrotor simulator | ✅ |
 | 3 | Cascaded controller: takeoff, hover, land | ⏳ |
 | 4 | EKF state estimation | ⏳ |
 | 5 | Mission FSM + safety supervisor | ⏳ |
@@ -58,6 +58,18 @@ Host-only development (no GPU needed):
 ```bash
 conda env create -f environment.yml && conda activate dronenav
 make ci                           # ruff + mypy --strict + pytest
+```
+
+## Phase 2: NumPy simulator validation
+
+Our own lightweight simulator (`dronenav.sim.python_sim`) reproduces the Pegasus
+actuation model and runs about 55x faster than real time on one CPU core,
+without a GPU. It matches closed-form solutions to within about 1e-12:
+
+![NumPy simulator validation](results/phase2/python_sim_validation.png)
+
+```bash
+python scripts/python_sim_demo.py      # regenerates the figure above
 ```
 
 ## Repository layout

@@ -1,0 +1,15 @@
+# Pure-NumPy simulator backend (no Isaac Sim). Units: SI, world frame ENU.
+
+simulation:
+  physics_dt: 0.004        # [s] 250 Hz, same as Pegasus
+  gravity: 9.81            # [m/s^2]
+  integrator: rk4          # rk4 | euler
+  ground:
+    enabled: true
+    height: 0.0            # [m]
+    crash_speed: 2.0       # [m/s] vertical impact speed counted as a crash
+  initial_state:
+    position: [0.0, 0.0, 0.0]
+    velocity: [0.0, 0.0, 0.0]
+    yaw: 0.0
+    angular_velocity: [0.0, 0.0, 0.0]

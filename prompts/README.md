@@ -12,3 +12,5 @@ the files generated or modified.
 | 04 | [04_phase1_start.md](04_phase1_start.md) | 1 | Skeleton, Docker, CI, smoke test |
 | 05 | [05_project_explanation.md](05_project_explanation.md) | 1 | Detailed explanation of structure and next steps |
 | 06 | [06_aws_budget_setup.md](06_aws_budget_setup.md) | 1 | Low-budget AWS workstation guide |
+| 07 | [07_phase2_explanation.md](07_phase2_explanation.md) | 2 | What Phase 2 is and how it differs from Phase 1 |
+| 08 | [08_phase2_start.md](08_phase2_start.md) | 2 | Core math, configs, simulator interface, NumPy simulator |

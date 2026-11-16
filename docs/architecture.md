@@ -39,7 +39,8 @@ flowchart LR
 |---|---|---|
 | `core` | Types, frames, quaternion / SO(3) math, clock | 2 |
 | `config` | pydantic schemas, YAML loading | 2 |
-| `sim` | `SimBackend` interface; NumPy and Isaac/Pegasus adapters | 2–3 |
+| `model` | Pegasus-identical actuation model: thrust curve, allocation and mixer, linear drag | 2 |
+| `sim` | Step-based `SimBackend` interface; NumPy simulator (Phase 2) and Isaac/Pegasus adapter (Phase 3) | 2–3 |
 | `control` | Cascaded control loops, mixer, saturation and anti-windup | 3 |
 | `estimation` | Error-state EKF (IMU, GPS, barometer, magnetometer); ground-truth mode | 4 |
 | `mission` | Mission FSM, waypoints, safety supervisor | 5 |
@@ -49,7 +50,17 @@ flowchart LR
 | `avoidance` | APF with tangential escape, velocity obstacles, local-minimum detection | 9 |
 | `telemetry` | Structured logs, metrics, 3D plots, tables, video helpers | 11 |
 
-## 3. Control loop timing (initial values, tuned in Phase 3)
+## 3. Simulator interface
+
+The caller owns the loop:
+`reset()` → repeat { `get_state()` / `get_sensors()` → controller → `step(rotor_speeds)` }.
+
+- **NumPy backend:** it implements this directly.
+- **Isaac Sim + Pegasus (callback-driven):** the adapter stores the command in a Pegasus `Backend` shim and calls `world.step()`, so the autonomy code never notices the difference.
+
+Rotor speeds are the only actuation input, exactly as in Pegasus.
+
+## 4. Control loop timing (initial values, tuned in Phase 3)
 | Loop | Rate |
 |---|---|
 | Physics (Pegasus default) | 250 Hz |
@@ -60,7 +71,7 @@ flowchart LR
 | Mapping | LiDAR rate (10–20 Hz) |
 | Global (re)planning | 1–2 Hz, or on demand |
 
-## 4. Mission state machine
+## 5. Mission state machine
 
 ```mermaid
 stateDiagram-v2
@@ -98,7 +109,7 @@ It can pre-empt the FSM on:
 - a mission timeout;
 - simulated low battery.
 
-## 5. Validation scenarios
+## 6. Validation scenarios
 
 | ID | Scenario | Main capability tested |
 |---|---|---|

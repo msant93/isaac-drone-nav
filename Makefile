@@ -1,6 +1,6 @@
 # Convenience targets. Host targets need the 'dronenav' conda env;
 # docker targets need Docker + NVIDIA Container Toolkit.
-.PHONY: help install check-env lint format typecheck test ci docker-build docker-shell smoke smoke-stream
+.PHONY: help install check-env lint format typecheck test ci sim-demo docker-build docker-shell smoke smoke-stream
 
 help:
 	@grep -E '^[a-z-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN{FS=":.*?## "}{printf "  %-14s %s\n",$$1,$$2}'
@@ -24,6 +24,9 @@ test: ## Unit tests (no Isaac Sim needed)
 	pytest
 
 ci: lint typecheck test ## Everything CI runs
+
+sim-demo: ## Validate the NumPy simulator and save a figure in results/phase2
+	python scripts/python_sim_demo.py
 
 docker-build: ## Build the Isaac Sim + Pegasus image
 	docker compose -f docker/docker-compose.yml build
