@@ -43,7 +43,8 @@ See [docs/architecture.md](docs/architecture.md) and [docs/design_decisions.md](
 ## Quick start
 
 Full instructions are in [docs/setup.md](docs/setup.md); they cover a local
-Ubuntu PC, AWS EC2 and a native install.
+Ubuntu PC, AWS EC2 and a native install. For a low-cost AWS workstation,
+see [docs/aws_budget_guide.md](docs/aws_budget_guide.md).
 
 ```bash
 git clone https://github.com/msant93/isaac-drone-nav.git

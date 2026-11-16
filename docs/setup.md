@@ -6,7 +6,7 @@ in all of them**: only the machine that hosts the container changes.
 | Path | When to use it |
 |---|---|
 | A. Local Ubuntu workstation + Docker (recommended) | You have an RTX GPU at home/university |
-| B. AWS EC2 GPU instance + Docker | No suitable local GPU |
+| B. AWS EC2 GPU instance + Docker ([budget guide](aws_budget_guide.md)) | No suitable local GPU |
 | C. Native Isaac Sim install (no Docker) | Fast GUI iteration on a local workstation |
 
 Host-only development (unit tests, planners, controllers, plots) works on
@@ -28,7 +28,7 @@ Host-only development (unit tests, planners, controllers, plots) works on
 | Disk | 100 GB free SSD (image ~20 GB + shader/asset caches) | 200 GB NVMe |
 | OS | Ubuntu 22.04 LTS (the version Pegasus v5.1.0 is tested on) | Ubuntu 22.04 LTS; 24.04 works for the container path |
 
-GPUs **without RT cores** (A100, H100, V100, T4, ...) cannot run Isaac Sim's
+GPUs **without RT cores** (A100, H100, V100, ...) cannot run Isaac Sim's
 RTX renderer, which the LiDAR and cameras need.
 
 Verify the official numbers and driver versions here (they change between releases):
@@ -91,48 +91,9 @@ persisted in `docker/cache/`, so later starts are much faster.
 
 ## B. AWS EC2
 
-### B.1 Before you start (do this first, it can take days)
-New AWS accounts often have a vCPU quota of **0** for GPU instances. Open
-*Service Quotas → Amazon EC2 → "Running On-Demand G and VT instances"* and
-request at least **8 vCPUs** (16 for `g6e.4xlarge`) in your region.
-
-### B.2 Choose the instance
-| Instance | GPU | Notes |
-|---|---|---|
-| `g5.2xlarge` | A10G 24 GB | good balance, widely available |
-| `g6.2xlarge` | L4 24 GB | cheapest option that works |
-| `g6e.2xlarge` | L40S 48 GB | best performance |
-
-Check the current prices with the AWS pricing calculator. **Stop the
-instance when you are not using it**: stopped instances only pay for storage.
-
-### B.3 Launch
-1. AMI: **NVIDIA GPU-Optimized AMI** (AWS Marketplace; driver, Docker and the
-   NVIDIA Container Toolkit come preinstalled) or Ubuntu 22.04 + Section A.1–A.2.
-2. Storage: **150 GB gp3**.
-3. Security group: SSH (22) from your IP only. The WebRTC ports do not need to be
-   public if you use an SSH tunnel or a VPN (see B.5).
-
-### B.4 Build and run (headless)
-```bash
-ssh -i <key.pem> ubuntu@<public-ip>
-git clone https://github.com/msant93/isaac-drone-nav.git && cd isaac-drone-nav
-python3 scripts/check_env.py
-make docker-build
-make smoke
-```
-To edit code remotely, use **VS Code → Remote-SSH** and open the repository folder.
-
-### B.5 Seeing the GUI from your laptop (WebRTC livestream)
-```bash
-./docker/run_livestream.sh scripts/smoke_test_hover.py
-```
-Then open the **Isaac Sim WebRTC Streaming Client** (download link in the
-Isaac Sim docs, *Livestream Clients* page) and connect to the instance IP.
-The client needs the WebRTC signalling port (TCP 49100) and the media
-port (UDP 47998) to be reachable: allow them **from your IP only** in
-the security group. Check the port list on the *Livestream Clients* page for
-5.1.0, because it has changed between releases.
+Follow **[aws_budget_guide.md](aws_budget_guide.md)**: a step-by-step, low-cost
+setup covering the account, GPU quota, `g4dn.2xlarge` with the free Deep Learning
+Base AMI, auto-stop, the daily workflow, livestream and a cost checklist.
 
 ---
 

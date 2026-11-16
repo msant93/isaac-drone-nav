@@ -25,7 +25,7 @@ MIN_FREE_DISK_GB = 60.0
 #: Minimum recommended VRAM [MiB].
 MIN_VRAM_MIB = 8 * 1024
 #: GPU name fragments without RT cores (not supported for RTX rendering).
-NON_RTX_GPUS = ("A100", "H100", "H200", "V100", "P100", "T4", "K80")
+NON_RTX_GPUS = ("A100", "H100", "H200", "V100", "P100", "K80")
 
 
 @dataclass

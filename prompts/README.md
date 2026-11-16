@@ -10,3 +10,5 @@ the files generated or modified.
 | 02 | [02_phase0_answers.md](02_phase0_answers.md) | 0 | Answers → environment, architecture, plan |
 | 03 | [03_clone_repository.md](03_clone_repository.md) | 0→1 | Attach the GitHub repository |
 | 04 | [04_phase1_start.md](04_phase1_start.md) | 1 | Skeleton, Docker, CI, smoke test |
+| 05 | [05_project_explanation.md](05_project_explanation.md) | 1 | Detailed explanation of structure and next steps |
+| 06 | [06_aws_budget_setup.md](06_aws_budget_setup.md) | 1 | Low-budget AWS workstation guide |
